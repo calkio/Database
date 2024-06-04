@@ -14,11 +14,11 @@ namespace Database.Mapper
         {
             return new Report(
                     id: entity.Id,
-                    phototrace: entity.Phototrace,
+                    phototrace: entity.Photogate,
                     dateTime: entity.DateTime,
                     diagnosis: entity.Diagnosis,
                     height: entity.Height,
-                    outsideDiameter: entity.OutsideDiameter,
+                    outerdiameter: entity.Outerdiameter,
                     innerDiameter: entity.InnerDiameter,
                     coilDiameter: entity.CoilDiameter,
                     perpendicularity: entity.Perpendicularity,
@@ -34,11 +34,11 @@ namespace Database.Mapper
             return new ReportDAL
             {
                 Id = model.Id,
-                Phototrace = model.Phototrace,
+                Photogate = model.Phototrace,
                 DateTime = model.DateTime,
                 Diagnosis = model.Diagnosis,
                 Height = model.Height,
-                OutsideDiameter = model.OutsideDiameter,
+                Outerdiameter = model.Outerdiameter,
                 InnerDiameter = model.InnerDiameter,
                 CoilDiameter = model.CoilDiameter,
                 Perpendicularity = model.Perpendicularity,

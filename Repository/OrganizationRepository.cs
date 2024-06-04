@@ -18,6 +18,35 @@ namespace Database.Repository
             _connectionString = connectionString;
         }
 
+        public OrganizationDAL GetByid(int id)
+        {
+            OrganizationDAL organizationDAL = null;
+
+            using (var connection = new NpgsqlConnection(_connectionString))
+            {
+                connection.Open();
+                var command = new NpgsqlCommand("SELECT * FROM Organization WHERE Id = @Id", connection);
+                command.Parameters.AddWithValue("@Id", id);
+
+                using (var reader = command.ExecuteReader())
+                {
+                    if (reader.Read())
+                    {
+                        organizationDAL.Id = (int)reader["Id"];
+                        organizationDAL.Name = (string)reader["Name"];
+                        organizationDAL.NumberOfSetups = (int)reader["NumberOfSetups"];
+                    }
+                }
+            }
+
+            if (organizationDAL == null)
+            {
+                throw new Exception("Не нашлось отчета по такому Id");
+            }
+
+            return organizationDAL;
+        }
+
         public void Add(OrganizationDAL organizationDAL)
         {
             using (var connection = new NpgsqlConnection(_connectionString))

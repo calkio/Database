@@ -9,11 +9,11 @@ namespace Database.DAL
     public class ReportDAL
     {
         public int Id { get; set; }
-        public byte Phototrace { get; set; }
+        public byte[] Photogate { get; set; }
         public DateTime DateTime { get; set; }
         public bool Diagnosis { get; set; }
         public double Height { get; set; }
-        public double OutsideDiameter { get; set; }
+        public double Outerdiameter { get; set; }
         public double InnerDiameter { get; set; }
         public double CoilDiameter { get; set; }
         public double Perpendicularity { get; set; }

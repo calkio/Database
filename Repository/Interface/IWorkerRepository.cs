@@ -9,6 +9,7 @@ namespace Database.Repository.Interface
 {
     public interface IWorkerRepository
     {
+        public WorkerDAL GetByid(int id);
         public void Add(WorkerDAL workerDAL);
         public void Delete(int id);
     }

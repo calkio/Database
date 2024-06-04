@@ -24,7 +24,7 @@ namespace Database.BLL.Entity
         }
 
 
-        public byte Phototrace { get; set; }
+        public byte[] Phototrace { get; set; }
 
 
         private DateTime _dateTime;
@@ -56,13 +56,13 @@ namespace Database.BLL.Entity
         }
 
 
-        private double _outsideDiameter;
-        public double OutsideDiameter
+        private double _oterdiameter;
+        public double Outerdiameter
         {
-            get => _outsideDiameter;
+            get => _oterdiameter;
             set
             {
-                _outsideDiameter = ValidateAndRoundOutsideDiameter(value);
+                _oterdiameter = ValidateAndRoundOutsideDiameter(value);
             }
         }
 
@@ -160,14 +160,14 @@ namespace Database.BLL.Entity
         }
 
 
-        public Report(int id, byte phototrace, DateTime dateTime, bool diagnosis, double height, double outsideDiameter, double innerDiameter, double coilDiameter, double perpendicularity, int kit, int springMarker, string cartType, int idInstallationWorker)
+        public Report(int id, byte[] phototrace, DateTime dateTime, bool diagnosis, double height, double outerdiameter, double innerDiameter, double coilDiameter, double perpendicularity, int kit, int springMarker, string cartType, int idInstallationWorker)
         {
             Id = id;
             Phototrace = phototrace;
             DateTime = dateTime;
             Diagnosis = diagnosis;
             Height = height;
-            OutsideDiameter = outsideDiameter;
+            Outerdiameter = outerdiameter;
             InnerDiameter = innerDiameter;
             CoilDiameter = coilDiameter;
             Perpendicularity = perpendicularity;

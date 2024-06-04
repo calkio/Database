@@ -18,6 +18,35 @@ namespace Database.Repository
             _connectionString = connectionString;
         }
 
+        public InstallationDAL GetByid(int id)
+        {
+            InstallationDAL installationDAL = null;
+
+            using (var connection = new NpgsqlConnection(_connectionString))
+            {
+                connection.Open();
+                var command = new NpgsqlCommand("SELECT * FROM Installation WHERE Id = @Id", connection);
+                command.Parameters.AddWithValue("@Id", id);
+
+                using (var reader = command.ExecuteReader())
+                {
+                    if (reader.Read())
+                    {
+                        installationDAL.Id = (int)reader["Id"];
+                        installationDAL.Date = (DateOnly)reader["Date"];
+                        installationDAL.IdOrganization = (int)reader["IdOrganization"];
+                    }
+                }
+            }
+
+            if (installationDAL == null)
+            {
+                throw new Exception("Не нашлось отчета по такому Id");
+            }
+
+            return installationDAL;
+        }
+
         public void Add(InstallationDAL installationDAL)
         {
             using (var connection = new NpgsqlConnection(_connectionString))

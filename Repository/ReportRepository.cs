@@ -33,11 +33,11 @@ namespace Database.Repository
                     {
                         var reportDAL = new ReportDAL();
                         reportDAL.Id = (int)reader["Id"];
-                        reportDAL.Phototrace = (byte)reader["Phototrace"];
+                        reportDAL.Photogate = (byte[])reader["Photogate"];
                         reportDAL.DateTime = (DateTime)reader["DateTime"];
                         reportDAL.Diagnosis = (bool)reader["Diagnosis"];
                         reportDAL.Height = (double)reader["Height"];
-                        reportDAL.OutsideDiameter = (double)reader["OutsideDiameter"];
+                        reportDAL.Outerdiameter = (double)reader["Outerdiameter"];
                         reportDAL.InnerDiameter = (double)reader["InnerDiameter"];
                         reportDAL.CoilDiameter = (double)reader["CoilDiameter"];
                         reportDAL.Perpendicularity = (double)reader["Perpendicularity"];
@@ -74,11 +74,11 @@ namespace Database.Repository
                     if (reader.Read())
                     {
                         reportDAL.Id = (int)reader["Id"];
-                        reportDAL.Phototrace = (byte)reader["Phototrace"];
+                        reportDAL.Photogate = (byte[])reader["Photogate"];
                         reportDAL.DateTime = (DateTime)reader["DateTime"];
                         reportDAL.Diagnosis = (bool)reader["Diagnosis"];
                         reportDAL.Height = (double)reader["Height"];
-                        reportDAL.OutsideDiameter = (double)reader["OutsideDiameter"];
+                        reportDAL.Outerdiameter = (double)reader["Outerdiameter"];
                         reportDAL.InnerDiameter = (double)reader["InnerDiameter"];
                         reportDAL.CoilDiameter = (double)reader["CoilDiameter"];
                         reportDAL.Perpendicularity = (double)reader["Perpendicularity"];
@@ -103,13 +103,13 @@ namespace Database.Repository
             using (var connection = new NpgsqlConnection(_connectionString))
             {
                 connection.Open();
-                var command = new NpgsqlCommand("INSERT INTO Report (Phototrace, DateTime, Diagnosis, Height, OutsideDiameter, InnerDiameter, CoilDiameter, Perpendicularity, Kit, SpringMarker, CartType, IdInstallationWorker) " +
-                                                "VALUES (@Phototrace, @DateTime, @Diagnosis, @Height, @OutsideDiameter, @InnerDiameter, @CoilDiameter, @Perpendicularity, @Kit, @SpringMarker, @CartType, @IdInstallationWorker)", connection);
-                command.Parameters.AddWithValue("@Phototrace", reportDAL.Phototrace);
+                var command = new NpgsqlCommand("INSERT INTO Report (Photogate, DateTime, Diagnosis, Height, Outerdiameter, InnerDiameter, CoilDiameter, Perpendicularity, Kit, SpringMarker, CartType, IdInstallationWorker) " +
+                                                "VALUES (@Photogate, @DateTime, @Diagnosis, @Height, @Outerdiameter, @InnerDiameter, @CoilDiameter, @Perpendicularity, @Kit, @SpringMarker, @CartType, @IdInstallationWorker)", connection);
+                command.Parameters.AddWithValue("@Photogate", reportDAL.Photogate);
                 command.Parameters.AddWithValue("@DateTime", reportDAL.DateTime);
                 command.Parameters.AddWithValue("@Diagnosis", reportDAL.Diagnosis);
                 command.Parameters.AddWithValue("@Height", reportDAL.Height);
-                command.Parameters.AddWithValue("@OutsideDiameter", reportDAL.OutsideDiameter);
+                command.Parameters.AddWithValue("@Outerdiameter", reportDAL.Outerdiameter);
                 command.Parameters.AddWithValue("@InnerDiameter", reportDAL.InnerDiameter);
                 command.Parameters.AddWithValue("@CoilDiameter", reportDAL.CoilDiameter);
                 command.Parameters.AddWithValue("@Perpendicularity", reportDAL.Perpendicularity);
