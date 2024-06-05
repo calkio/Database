@@ -9,8 +9,8 @@ namespace Database.Repository.Interface
 {
     public interface IInstallationRepository
     {
-        public InstallationDAL GetByid(int id);
-        public void Add(InstallationDAL installationDAL);
-        public void Delete(int id);
+        public Task<InstallationDAL> GetByIdAsync(int id);
+        public Task AddAsync(InstallationDAL installationDAL);
+        public Task DeleteAsync(int id);
     }
 }

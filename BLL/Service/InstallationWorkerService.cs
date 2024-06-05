@@ -19,13 +19,11 @@ namespace Database.BLL.Service
             _installationWorkerRepository = installationWorkerRepository;
         }
 
-        public void CreateInstallation(Installation installation, Worker worker)
+        public async Task AddInstallationWorkerAsync(InstallationDAL installationDAL, WorkerDAL workerDAL)
         {
             try
             {
-                var installationEntity = installation.ToDAL();
-                var workerEntity = worker.ToDAL();
-                _installationWorkerRepository.Add(installationEntity, workerEntity);
+                await _installationWorkerRepository.AddAsync(installationDAL, workerDAL);
             }
             catch (Exception)
             {
@@ -33,11 +31,11 @@ namespace Database.BLL.Service
             }
         }
 
-        public void DeleteInstallation(int id)
+        public async Task DeleteInstallationWorkerAsync(int id)
         {
             try
             {
-                _installationWorkerRepository.Delete(id);
+                await _installationWorkerRepository.DeleteAsync(id);
             }
             catch (Exception)
             {

@@ -19,12 +19,12 @@ namespace Database.BLL.Service
             _installationRepository = installationRepository;
         }
 
-        public Installation GetInstallationById(int id)
+        public async Task<Installation> GetInstallationByIdAsync(int id)
         {
             try
             {
-                var installationEntities = _installationRepository.GetByid(id);
-                return installationEntities?.ToBLL();
+                var installationRepositoryEntity = await _installationRepository.GetByIdAsync(id);
+                return installationRepositoryEntity?.ToBLL();
             }
             catch (Exception)
             {
@@ -32,12 +32,12 @@ namespace Database.BLL.Service
             }
         }
 
-        public void CreateInstallation(Installation installation)
+        public async Task CreateInstallationAsync(Installation installation)
         {
             try
             {
                 var installationEntity = installation.ToDAL();
-                _installationRepository.Add(installationEntity);
+                await _installationRepository.AddAsync(installationEntity);
             }
             catch (Exception)
             {
@@ -45,11 +45,11 @@ namespace Database.BLL.Service
             }
         }
 
-        public void DeleteInstallation(int id)
+        public async Task DeleteInstallationAsync(int id)
         {
             try
             {
-                _installationRepository.Delete(id);
+                await _installationRepository.DeleteAsync(id);
             }
             catch (Exception)
             {

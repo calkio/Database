@@ -18,18 +18,18 @@ namespace Database.Repository
             _connectionString = connectionString;
         }
 
-        public IEnumerable<ReportDAL> GetAll()
+        public async Task<IEnumerable<ReportDAL>> GetAllAsync()
         {
             var reportsDAL = new List<ReportDAL>();
 
             using (var connection = new NpgsqlConnection(_connectionString))
             {
-                connection.Open();
+                await connection.OpenAsync();
                 var command = new NpgsqlCommand("SELECT * FROM Report", connection);
 
-                using (var reader = command.ExecuteReader())
+                using (var reader = await command.ExecuteReaderAsync())
                 {
-                    while (reader.Read())
+                    while (await reader.ReadAsync())
                     {
                         var reportDAL = new ReportDAL();
                         reportDAL.Id = (int)reader["Id"];
@@ -51,7 +51,7 @@ namespace Database.Repository
                 }
             }
 
-            if (reportsDAL.Count == 0 || reportsDAL == null)
+            if (reportsDAL.Count == 0)
             {
                 throw new Exception("Был выдан пустой список");
             }
@@ -59,33 +59,36 @@ namespace Database.Repository
             return reportsDAL;
         }
 
-        public ReportDAL GetById(int id)
+        public async Task<ReportDAL> GetByIdAsync(int id)
         {
             ReportDAL reportDAL = null;
 
             using (var connection = new NpgsqlConnection(_connectionString))
             {
-                connection.Open();
+                await connection.OpenAsync();
                 var command = new NpgsqlCommand("SELECT * FROM Report WHERE Id = @Id", connection);
                 command.Parameters.AddWithValue("@Id", id);
 
-                using (var reader = command.ExecuteReader())
+                using (var reader = await command.ExecuteReaderAsync())
                 {
-                    if (reader.Read())
+                    if (await reader.ReadAsync())
                     {
-                        reportDAL.Id = (int)reader["Id"];
-                        reportDAL.Photogate = (byte[])reader["Photogate"];
-                        reportDAL.DateTime = (DateTime)reader["DateTime"];
-                        reportDAL.Diagnosis = (bool)reader["Diagnosis"];
-                        reportDAL.Height = (double)reader["Height"];
-                        reportDAL.Outerdiameter = (double)reader["Outerdiameter"];
-                        reportDAL.InnerDiameter = (double)reader["InnerDiameter"];
-                        reportDAL.CoilDiameter = (double)reader["CoilDiameter"];
-                        reportDAL.Perpendicularity = (double)reader["Perpendicularity"];
-                        reportDAL.Kit = (int)reader["Kit"];
-                        reportDAL.SpringMarker = (int)reader["SpringMarker"];
-                        reportDAL.CartType = (string)reader["CartType"];
-                        reportDAL.IdInstallationWorker = (int)reader["IdInstallationWorker"];
+                        reportDAL = new ReportDAL
+                        {
+                            Id = (int)reader["Id"],
+                            Photogate = (byte[])reader["Photogate"],
+                            DateTime = (DateTime)reader["DateTime"],
+                            Diagnosis = (bool)reader["Diagnosis"],
+                            Height = (double)reader["Height"],
+                            Outerdiameter = (double)reader["Outerdiameter"],
+                            InnerDiameter = (double)reader["InnerDiameter"],
+                            CoilDiameter = (double)reader["CoilDiameter"],
+                            Perpendicularity = (double)reader["Perpendicularity"],
+                            Kit = (int)reader["Kit"],
+                            SpringMarker = (int)reader["SpringMarker"],
+                            CartType = (string)reader["CartType"],
+                            IdInstallationWorker = (int)reader["IdInstallationWorker"]
+                        };
                     }
                 }
             }
@@ -98,11 +101,11 @@ namespace Database.Repository
             return reportDAL;
         }
 
-        public void Add(ReportDAL reportDAL)
+        public async Task AddAsync(ReportDAL reportDAL)
         {
             using (var connection = new NpgsqlConnection(_connectionString))
             {
-                connection.Open();
+                await connection.OpenAsync();
                 var command = new NpgsqlCommand("INSERT INTO Report (Photogate, DateTime, Diagnosis, Height, Outerdiameter, InnerDiameter, CoilDiameter, Perpendicularity, Kit, SpringMarker, CartType, IdInstallationWorker) " +
                                                 "VALUES (@Photogate, @DateTime, @Diagnosis, @Height, @Outerdiameter, @InnerDiameter, @CoilDiameter, @Perpendicularity, @Kit, @SpringMarker, @CartType, @IdInstallationWorker)", connection);
                 command.Parameters.AddWithValue("@Photogate", reportDAL.Photogate);
@@ -117,18 +120,18 @@ namespace Database.Repository
                 command.Parameters.AddWithValue("@SpringMarker", reportDAL.SpringMarker);
                 command.Parameters.AddWithValue("@CartType", reportDAL.CartType);
                 command.Parameters.AddWithValue("@IdInstallationWorker", reportDAL.IdInstallationWorker);
-                command.ExecuteNonQuery();
+                await command.ExecuteNonQueryAsync();
             }
         }
 
-        public void Delete(int id)
+        public async Task DeleteAsync(int id)
         {
             using (var connection = new NpgsqlConnection(_connectionString))
             {
-                connection.Open();
+                await connection.OpenAsync();
                 var command = new NpgsqlCommand("DELETE FROM Report WHERE Id = @Id", connection);
                 command.Parameters.AddWithValue("@Id", id);
-                command.ExecuteNonQuery();
+                await command.ExecuteNonQueryAsync();
             }
         }
     }

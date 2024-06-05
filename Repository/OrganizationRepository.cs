@@ -18,23 +18,26 @@ namespace Database.Repository
             _connectionString = connectionString;
         }
 
-        public OrganizationDAL GetByid(int id)
+        public async Task<OrganizationDAL> GetByIdAsync(int id)
         {
             OrganizationDAL organizationDAL = null;
 
             using (var connection = new NpgsqlConnection(_connectionString))
             {
-                connection.Open();
+                await connection.OpenAsync();
                 var command = new NpgsqlCommand("SELECT * FROM Organization WHERE Id = @Id", connection);
                 command.Parameters.AddWithValue("@Id", id);
 
-                using (var reader = command.ExecuteReader())
+                using (var reader = await command.ExecuteReaderAsync())
                 {
-                    if (reader.Read())
+                    if (await reader.ReadAsync())
                     {
-                        organizationDAL.Id = (int)reader["Id"];
-                        organizationDAL.Name = (string)reader["Name"];
-                        organizationDAL.NumberOfSetups = (int)reader["NumberOfSetups"];
+                        organizationDAL = new OrganizationDAL
+                        {
+                            Id = (int)reader["Id"],
+                            Name = (string)reader["Name"],
+                            NumberOfSetups = (int)reader["NumberOfSetups"]
+                        };
                     }
                 }
             }
@@ -47,28 +50,29 @@ namespace Database.Repository
             return organizationDAL;
         }
 
-        public void Add(OrganizationDAL organizationDAL)
+        public async Task AddAsync(OrganizationDAL organizationDAL)
         {
             using (var connection = new NpgsqlConnection(_connectionString))
             {
-                connection.Open();
+                await connection.OpenAsync();
                 var command = new NpgsqlCommand("INSERT INTO Organization (Name, NumberOfSetups) " +
                                                 "VALUES (@Name, @NumberOfSetups)", connection);
                 command.Parameters.AddWithValue("@Name", organizationDAL.Name);
                 command.Parameters.AddWithValue("@NumberOfSetups", organizationDAL.NumberOfSetups);
-                command.ExecuteNonQuery();
+                await command.ExecuteNonQueryAsync();
             }
         }
 
-        public void Delete(int id)
+        public async Task DeleteAsync(int id)
         {
             using (var connection = new NpgsqlConnection(_connectionString))
             {
-                connection.Open();
+                await connection.OpenAsync();
                 var command = new NpgsqlCommand("DELETE FROM Organization WHERE Id = @Id", connection);
                 command.Parameters.AddWithValue("@Id", id);
-                command.ExecuteNonQuery();
+                await command.ExecuteNonQueryAsync();
             }
         }
+
     }
 }

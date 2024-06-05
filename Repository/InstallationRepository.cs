@@ -18,57 +18,61 @@ namespace Database.Repository
             _connectionString = connectionString;
         }
 
-        public InstallationDAL GetByid(int id)
+        public async Task<InstallationDAL> GetByIdAsync(int id)
         {
             InstallationDAL installationDAL = null;
 
             using (var connection = new NpgsqlConnection(_connectionString))
             {
-                connection.Open();
+                await connection.OpenAsync();
                 var command = new NpgsqlCommand("SELECT * FROM Installation WHERE Id = @Id", connection);
                 command.Parameters.AddWithValue("@Id", id);
 
-                using (var reader = command.ExecuteReader())
+                using (var reader = await command.ExecuteReaderAsync())
                 {
-                    if (reader.Read())
+                    if (await reader.ReadAsync())
                     {
-                        installationDAL.Id = (int)reader["Id"];
-                        installationDAL.Date = (DateOnly)reader["Date"];
-                        installationDAL.IdOrganization = (int)reader["IdOrganization"];
+                        installationDAL = new InstallationDAL
+                        {
+                            Id = (int)reader["Id"],
+                            Date = (DateOnly)reader["Date"],
+                            IdOrganization = (int)reader["IdOrganization"]
+                        };
                     }
                 }
             }
 
             if (installationDAL == null)
             {
-                throw new Exception("Не нашлось отчета по такому Id");
+                throw new Exception("Не нашлось установки по такому Id");
             }
 
             return installationDAL;
         }
 
-        public void Add(InstallationDAL installationDAL)
+        public async Task AddAsync(InstallationDAL installationDAL)
         {
             using (var connection = new NpgsqlConnection(_connectionString))
             {
-                connection.Open();
+                await connection.OpenAsync();
                 var command = new NpgsqlCommand("INSERT INTO Installation (StartDate, IdOrganization) " +
                                                 "VALUES (@StartDate, @IdOrganization)", connection);
                 command.Parameters.AddWithValue("@StartDate", installationDAL.Date);
                 command.Parameters.AddWithValue("@IdOrganization", installationDAL.IdOrganization);
-                command.ExecuteNonQuery();
+                await command.ExecuteNonQueryAsync();
             }
         }
 
-        public void Delete(int id)
+        public async Task DeleteAsync(int id)
         {
             using (var connection = new NpgsqlConnection(_connectionString))
             {
-                connection.Open();
+                await connection.OpenAsync();
                 var command = new NpgsqlCommand("DELETE FROM Installation WHERE Id = @Id", connection);
                 command.Parameters.AddWithValue("@Id", id);
-                command.ExecuteNonQuery();
+                await command.ExecuteNonQueryAsync();
             }
         }
+
     }
 }

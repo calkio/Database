@@ -9,8 +9,8 @@ namespace Database.Repository.Interface
 {
     public interface IWorkerRepository
     {
-        public WorkerDAL GetByid(int id);
-        public void Add(WorkerDAL workerDAL);
-        public void Delete(int id);
+        public Task<WorkerDAL> GetByIdAsync(int id);
+        public Task AddAsync(WorkerDAL workerDAL);
+        public Task DeleteAsync(int id);
     }
 }

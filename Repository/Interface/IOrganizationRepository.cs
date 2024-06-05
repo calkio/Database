@@ -10,8 +10,8 @@ namespace Database.Repository.Interface
 {
     public interface IOrganizationRepository
     {
-        public OrganizationDAL GetByid(int id);
-        public void Add(OrganizationDAL organizationDAL);
-        public void Delete(int id);
+        public Task<OrganizationDAL> GetByIdAsync(int id);
+        public Task AddAsync(OrganizationDAL organizationDAL);
+        public Task DeleteAsync(int id);
     }
 }

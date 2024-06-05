@@ -19,11 +19,11 @@ namespace Database.BLL.Service
             _reportRepository = reportRepository;
         }
 
-        public IEnumerable<Report> GetAllReport()
+        public async Task<IEnumerable<Report>> GetAllReportAsync()
         {
             try
             {
-                var reportEntities = _reportRepository.GetAll();
+                var reportEntities = await _reportRepository.GetAllAsync();
                 return reportEntities.Select(e => e.ToBLL());
             }
             catch (Exception)
@@ -32,11 +32,11 @@ namespace Database.BLL.Service
             }
         }
 
-        public Report GetReportById(int id)
+        public async Task<Report> GetReportByIdAsync(int id)
         {
             try
             {
-                var reportRepositoryEntity = _reportRepository.GetById(id);
+                var reportRepositoryEntity = await _reportRepository.GetByIdAsync(id);
                 return reportRepositoryEntity?.ToBLL();
             }
             catch (Exception)
@@ -45,12 +45,12 @@ namespace Database.BLL.Service
             }
         }
 
-        public void CreateReport(Report report)
+        public async Task CreateReportAsync(Report report)
         {
             try
             {
                 var reportEntity = report.ToDAL();
-                _reportRepository.Add(reportEntity);
+                await _reportRepository.AddAsync(reportEntity);
             }
             catch (Exception)
             {
@@ -58,11 +58,11 @@ namespace Database.BLL.Service
             }
         }
 
-        public void DeleteReport(int id)
+        public async Task DeleteReportAsync(int id)
         {
             try
             {
-                _reportRepository.Delete(id);
+                await _reportRepository.DeleteAsync(id);
             }
             catch (Exception)
             {

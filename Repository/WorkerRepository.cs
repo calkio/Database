@@ -18,24 +18,27 @@ namespace Database.Repository
             _connectionString = connectionString;
         }
 
-        public WorkerDAL GetByid(int id)
+        public async Task<WorkerDAL> GetByIdAsync(int id)
         {
-            WorkerDAL workerDAL = new WorkerDAL();
+            WorkerDAL workerDAL = null;
 
             using (var connection = new NpgsqlConnection(_connectionString))
             {
-                connection.Open();
+                await connection.OpenAsync();
                 var command = new NpgsqlCommand("SELECT * FROM Worker WHERE Id = @Id", connection);
                 command.Parameters.AddWithValue("@Id", id);
 
-                using (var reader = command.ExecuteReader())
+                using (var reader = await command.ExecuteReaderAsync())
                 {
-                    if (reader.Read())
+                    if (await reader.ReadAsync())
                     {
-                        workerDAL.Id = (int)reader["Id"];
-                        workerDAL.LastName = (string)reader["LastName"];
-                        workerDAL.FirstName = (string)reader["FirstName"];
-                        workerDAL.MiddleName = (string)reader["MiddleName"];
+                        workerDAL = new WorkerDAL
+                        {
+                            Id = (int)reader["Id"],
+                            LastName = (string)reader["LastName"],
+                            FirstName = (string)reader["FirstName"],
+                            MiddleName = (string)reader["MiddleName"]
+                        };
                     }
                 }
             }
@@ -48,28 +51,28 @@ namespace Database.Repository
             return workerDAL;
         }
 
-        public void Add(WorkerDAL workerDAL)
+        public async Task AddAsync(WorkerDAL workerDAL)
         {
             using (var connection = new NpgsqlConnection(_connectionString))
             {
-                connection.Open();
+                await connection.OpenAsync();
                 var command = new NpgsqlCommand("INSERT INTO Worker (LastName, FirstName, MiddleName) " +
                                                 "VALUES (@LastName, @FirstName, @MiddleName)", connection);
                 command.Parameters.AddWithValue("@LastName", workerDAL.LastName);
                 command.Parameters.AddWithValue("@FirstName", workerDAL.FirstName);
                 command.Parameters.AddWithValue("@MiddleName", workerDAL.MiddleName);
-                command.ExecuteNonQuery();
+                await command.ExecuteNonQueryAsync();
             }
         }
 
-        public void Delete(int id)
+        public async Task DeleteAsync(int id)
         {
             using (var connection = new NpgsqlConnection(_connectionString))
             {
-                connection.Open();
+                await connection.OpenAsync();
                 var command = new NpgsqlCommand("DELETE FROM Worker WHERE Id = @Id", connection);
                 command.Parameters.AddWithValue("@Id", id);
-                command.ExecuteNonQuery();
+                await command.ExecuteNonQueryAsync();
             }
         }
     }

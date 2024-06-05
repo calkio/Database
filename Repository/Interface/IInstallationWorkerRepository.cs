@@ -10,7 +10,7 @@ namespace Database.Repository.Interface
 {
     public interface IInstallationWorkerRepository
     {
-        public void Add(InstallationDAL installationDAL, WorkerDAL workerDAL);
-        public void Delete(int id);
+        public Task AddAsync(InstallationDAL installationDAL, WorkerDAL workerDAL);
+        public Task DeleteAsync(int id);
     }
 }

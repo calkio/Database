@@ -9,9 +9,9 @@ namespace Database.Repository.Interface
 {
     public interface IReportRepository
     {
-        public IEnumerable<ReportDAL> GetAll();
-        public ReportDAL GetById(int id);
-        public void Add(ReportDAL reportDAL);
-        public void Delete(int id);
+        public Task<IEnumerable<ReportDAL>> GetAllAsync();
+        public Task<ReportDAL> GetByIdAsync(int id);
+        public Task AddAsync(ReportDAL reportDAL);
+        public Task DeleteAsync(int id);
     }
 }

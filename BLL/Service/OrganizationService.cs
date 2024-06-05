@@ -1,4 +1,5 @@
 ﻿using Database.BLL.Entity;
+using Database.DAL;
 using Database.Mapper;
 using Database.Repository;
 using Database.Repository.Interface;
@@ -19,12 +20,12 @@ namespace Database.BLL.Service
             _iOrganizationRepository = iOrganizationRepository;
         }
 
-        public Organization GetOrganizationById(int id)
+        public async Task<Organization> GetOrganizationByIdAsync(int id)
         {
             try
             {
-                var organizationEntities = _iOrganizationRepository.GetByid(id);
-                return organizationEntities?.ToBLL();
+                var organizationRepositoryEntity = await _iOrganizationRepository.GetByIdAsync(id);
+                return organizationRepositoryEntity?.ToBLL();
             }
             catch (Exception)
             {
@@ -32,12 +33,12 @@ namespace Database.BLL.Service
             }
         }
 
-        public void CreateOrganization(Organization organization)
+        public async Task CreateOrganizationAsync(Organization organization)
         {
             try
             {
                 var organizationEntity = organization.ToDAL();
-                _iOrganizationRepository.Add(organizationEntity);
+                await _iOrganizationRepository.AddAsync(organizationEntity);
             }
             catch (Exception)
             {
@@ -45,11 +46,11 @@ namespace Database.BLL.Service
             }
         }
 
-        public void DeleteOrganization(int id)
+        public async Task DeleteOrganizationAsync(int id)
         {
             try
             {
-                _iOrganizationRepository.Delete(id);
+                await _iOrganizationRepository.DeleteAsync(id);
             }
             catch (Exception)
             {

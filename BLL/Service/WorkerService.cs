@@ -19,12 +19,12 @@ namespace Database.BLL.Service
             _workerRepository = workerRepository;
         }
 
-        public Worker GetWorkerById(int id)
+        public async Task<Worker> GetWorkerByIdAsync(int id)
         {
             try
             {
-                var installationEntities = _workerRepository.GetByid(id);
-                return installationEntities?.ToBLL();
+                var workerRepositoryEntity = await _workerRepository.GetByIdAsync(id);
+                return workerRepositoryEntity?.ToBLL();
             }
             catch (Exception)
             {
@@ -32,12 +32,12 @@ namespace Database.BLL.Service
             }
         }
 
-        public void CreateWorker(Worker worker)
+        public async Task CreateWorkerAsync(Worker worker)
         {
             try
             {
                 var workerEntity = worker.ToDAL();
-                _workerRepository.Add(workerEntity);
+                await _workerRepository.AddAsync(workerEntity);
             }
             catch (Exception)
             {
@@ -45,11 +45,11 @@ namespace Database.BLL.Service
             }
         }
 
-        public void DeleteWorker(int id)
+        public async Task DeleteWorkerAsync(int id)
         {
             try
             {
-                _workerRepository.Delete(id);
+                await _workerRepository.DeleteAsync(id);
             }
             catch (Exception)
             {
