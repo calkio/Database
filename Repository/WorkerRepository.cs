@@ -25,9 +25,9 @@ namespace Database.Repository
             using (var connection = new NpgsqlConnection(_connectionString))
             {
                 await connection.OpenAsync();
-                var command = new NpgsqlCommand("SELECT * FROM Worker WHERE Id = @Id", connection);
-                command.Parameters.AddWithValue("@Id", id);
-
+                var command = new NpgsqlCommand("SELECT * FROM get_worker_by_id(@id_argument)", connection);
+                command.Parameters.AddWithValue("@id_argument", id);
+                
                 using (var reader = await command.ExecuteReaderAsync())
                 {
                     if (await reader.ReadAsync())
@@ -56,11 +56,10 @@ namespace Database.Repository
             using (var connection = new NpgsqlConnection(_connectionString))
             {
                 await connection.OpenAsync();
-                var command = new NpgsqlCommand("INSERT INTO Worker (LastName, FirstName, MiddleName) " +
-                                                "VALUES (@LastName, @FirstName, @MiddleName)", connection);
-                command.Parameters.AddWithValue("@LastName", workerDAL.LastName);
-                command.Parameters.AddWithValue("@FirstName", workerDAL.FirstName);
-                command.Parameters.AddWithValue("@MiddleName", workerDAL.MiddleName);
+                var command = new NpgsqlCommand("CALL add_worker(@lastname_argument, @firstname_argument, @middlename_argument)", connection);
+                command.Parameters.AddWithValue("@lastname_argument", workerDAL.LastName);
+                command.Parameters.AddWithValue("@firstname_argument", workerDAL.FirstName);
+                command.Parameters.AddWithValue("@middlename_argument", workerDAL.MiddleName);
                 await command.ExecuteNonQueryAsync();
             }
         }
@@ -70,8 +69,8 @@ namespace Database.Repository
             using (var connection = new NpgsqlConnection(_connectionString))
             {
                 await connection.OpenAsync();
-                var command = new NpgsqlCommand("DELETE FROM Worker WHERE Id = @Id", connection);
-                command.Parameters.AddWithValue("@Id", id);
+                var command = new NpgsqlCommand("CALL delete_worker_by_id(@id_argument)", connection);
+                command.Parameters.AddWithValue("@id_argument", id);
                 await command.ExecuteNonQueryAsync();
             }
         }

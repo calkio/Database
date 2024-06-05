@@ -25,8 +25,8 @@ namespace Database.Repository
             using (var connection = new NpgsqlConnection(_connectionString))
             {
                 await connection.OpenAsync();
-                var command = new NpgsqlCommand("SELECT * FROM Organization WHERE Id = @Id", connection);
-                command.Parameters.AddWithValue("@Id", id);
+                var command = new NpgsqlCommand("SELECT * FROM get_organization_by_id(@id_argument)", connection);
+                command.Parameters.AddWithValue("@id_argument", id);
 
                 using (var reader = await command.ExecuteReaderAsync())
                 {
@@ -55,10 +55,9 @@ namespace Database.Repository
             using (var connection = new NpgsqlConnection(_connectionString))
             {
                 await connection.OpenAsync();
-                var command = new NpgsqlCommand("INSERT INTO Organization (Name, NumberOfSetups) " +
-                                                "VALUES (@Name, @NumberOfSetups)", connection);
-                command.Parameters.AddWithValue("@Name", organizationDAL.Name);
-                command.Parameters.AddWithValue("@NumberOfSetups", organizationDAL.NumberOfSetups);
+                var command = new NpgsqlCommand("CALL add_organization(@name_argument, @number_of_setups_argument)", connection);
+                command.Parameters.AddWithValue("@name_argument", organizationDAL.Name);
+                command.Parameters.AddWithValue("@number_of_setups_argument", organizationDAL.NumberOfSetups);
                 await command.ExecuteNonQueryAsync();
             }
         }
@@ -68,7 +67,7 @@ namespace Database.Repository
             using (var connection = new NpgsqlConnection(_connectionString))
             {
                 await connection.OpenAsync();
-                var command = new NpgsqlCommand("DELETE FROM Organization WHERE Id = @Id", connection);
+                var command = new NpgsqlCommand("CALL delete_organization_by_id(@id_argument)", connection);
                 command.Parameters.AddWithValue("@Id", id);
                 await command.ExecuteNonQueryAsync();
             }

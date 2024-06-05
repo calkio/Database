@@ -23,10 +23,9 @@ namespace Database.Repository
             using (var connection = new NpgsqlConnection(_connectionString))
             {
                 await connection.OpenAsync();
-                var command = new NpgsqlCommand("INSERT INTO InstallationWorker (IdInstallation, IdWorker) " +
-                                                "VALUES (@IdInstallation, @IdWorker)", connection);
-                command.Parameters.AddWithValue("@IdInstallation", installationDAL.Id);
-                command.Parameters.AddWithValue("@IdWorker", workerDAL.Id);
+                var command = new NpgsqlCommand("CALL add_installation_worker(@idinstallation_argument, @idworker_argument)", connection);
+                command.Parameters.AddWithValue("@idinstallation_argument", installationDAL.Id);
+                command.Parameters.AddWithValue("@idworker_argument", workerDAL.Id);
                 await command.ExecuteNonQueryAsync();
             }
         }
@@ -36,7 +35,7 @@ namespace Database.Repository
             using (var connection = new NpgsqlConnection(_connectionString))
             {
                 await connection.OpenAsync();
-                var command = new NpgsqlCommand("DELETE FROM InstallationWorker WHERE Id = @Id", connection);
+                var command = new NpgsqlCommand("CALL delete_installation_worker_by_id(@id_argument)", connection);
                 command.Parameters.AddWithValue("@Id", id);
                 await command.ExecuteNonQueryAsync();
             }

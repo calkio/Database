@@ -25,8 +25,8 @@ namespace Database.Repository
             using (var connection = new NpgsqlConnection(_connectionString))
             {
                 await connection.OpenAsync();
-                var command = new NpgsqlCommand("SELECT * FROM Installation WHERE Id = @Id", connection);
-                command.Parameters.AddWithValue("@Id", id);
+                var command = new NpgsqlCommand("SELECT * FROM get_installation_by_id(@id_argument)", connection);
+                command.Parameters.AddWithValue("@id_argument", id);
 
                 using (var reader = await command.ExecuteReaderAsync())
                 {
@@ -55,10 +55,9 @@ namespace Database.Repository
             using (var connection = new NpgsqlConnection(_connectionString))
             {
                 await connection.OpenAsync();
-                var command = new NpgsqlCommand("INSERT INTO Installation (StartDate, IdOrganization) " +
-                                                "VALUES (@StartDate, @IdOrganization)", connection);
-                command.Parameters.AddWithValue("@StartDate", installationDAL.Date);
-                command.Parameters.AddWithValue("@IdOrganization", installationDAL.IdOrganization);
+                var command = new NpgsqlCommand("CALL add_installation(@date_argument, @idorganization_argument)", connection);
+                command.Parameters.AddWithValue("@date_argument", installationDAL.Date);
+                command.Parameters.AddWithValue("@idorganization_argument", installationDAL.IdOrganization);
                 await command.ExecuteNonQueryAsync();
             }
         }
@@ -68,8 +67,8 @@ namespace Database.Repository
             using (var connection = new NpgsqlConnection(_connectionString))
             {
                 await connection.OpenAsync();
-                var command = new NpgsqlCommand("DELETE FROM Installation WHERE Id = @Id", connection);
-                command.Parameters.AddWithValue("@Id", id);
+                var command = new NpgsqlCommand("CALL delete_installation_by_id(@id_argument)", connection);
+                command.Parameters.AddWithValue("@id_argument", id);
                 await command.ExecuteNonQueryAsync();
             }
         }

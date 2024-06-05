@@ -66,8 +66,8 @@ namespace Database.Repository
             using (var connection = new NpgsqlConnection(_connectionString))
             {
                 await connection.OpenAsync();
-                var command = new NpgsqlCommand("SELECT * FROM Report WHERE Id = @Id", connection);
-                command.Parameters.AddWithValue("@Id", id);
+                var command = new NpgsqlCommand("SELECT * FROM get_installation_by_id(@id_argument)", connection);
+                command.Parameters.AddWithValue("@id_argument", id);
 
                 using (var reader = await command.ExecuteReaderAsync())
                 {
@@ -106,20 +106,19 @@ namespace Database.Repository
             using (var connection = new NpgsqlConnection(_connectionString))
             {
                 await connection.OpenAsync();
-                var command = new NpgsqlCommand("INSERT INTO Report (Photogate, DateTime, Diagnosis, Height, Outerdiameter, InnerDiameter, CoilDiameter, Perpendicularity, Kit, SpringMarker, CartType, IdInstallationWorker) " +
-                                                "VALUES (@Photogate, @DateTime, @Diagnosis, @Height, @Outerdiameter, @InnerDiameter, @CoilDiameter, @Perpendicularity, @Kit, @SpringMarker, @CartType, @IdInstallationWorker)", connection);
-                command.Parameters.AddWithValue("@Photogate", reportDAL.Photogate);
-                command.Parameters.AddWithValue("@DateTime", reportDAL.DateTime);
-                command.Parameters.AddWithValue("@Diagnosis", reportDAL.Diagnosis);
-                command.Parameters.AddWithValue("@Height", reportDAL.Height);
-                command.Parameters.AddWithValue("@Outerdiameter", reportDAL.Outerdiameter);
-                command.Parameters.AddWithValue("@InnerDiameter", reportDAL.InnerDiameter);
-                command.Parameters.AddWithValue("@CoilDiameter", reportDAL.CoilDiameter);
-                command.Parameters.AddWithValue("@Perpendicularity", reportDAL.Perpendicularity);
-                command.Parameters.AddWithValue("@Kit", reportDAL.Kit);
-                command.Parameters.AddWithValue("@SpringMarker", reportDAL.SpringMarker);
-                command.Parameters.AddWithValue("@CartType", reportDAL.CartType);
-                command.Parameters.AddWithValue("@IdInstallationWorker", reportDAL.IdInstallationWorker);
+                var command = new NpgsqlCommand("CALL add_installation(@photogate_argument, @datetime_argument, @diagnosis_argument, @height_argument, @outerdiameter_argument, @innerdiameter_argument, @coildiameter_argument, @perpendicularity_argument, @kit_argument, @springmarker_argument, @carttype_argument, @idinstallationworker_argument)", connection);
+                command.Parameters.AddWithValue("@photogate_argument", reportDAL.Photogate);
+                command.Parameters.AddWithValue("@datetime_argument", reportDAL.DateTime);
+                command.Parameters.AddWithValue("@diagnosis_argument", reportDAL.Diagnosis);
+                command.Parameters.AddWithValue("@height_argument", reportDAL.Height);
+                command.Parameters.AddWithValue("@outerdiameter_argument", reportDAL.Outerdiameter);
+                command.Parameters.AddWithValue("@innerdiameter_argument", reportDAL.InnerDiameter);
+                command.Parameters.AddWithValue("@coildiameter_argument", reportDAL.CoilDiameter);
+                command.Parameters.AddWithValue("@perpendicularity_argument", reportDAL.Perpendicularity);
+                command.Parameters.AddWithValue("@kit_argument", reportDAL.Kit);
+                command.Parameters.AddWithValue("@springmarker_argument", reportDAL.SpringMarker);
+                command.Parameters.AddWithValue("@carttype_argument", reportDAL.CartType);
+                command.Parameters.AddWithValue("@idinstallationworker_argument", reportDAL.IdInstallationWorker);
                 await command.ExecuteNonQueryAsync();
             }
         }
@@ -129,8 +128,8 @@ namespace Database.Repository
             using (var connection = new NpgsqlConnection(_connectionString))
             {
                 await connection.OpenAsync();
-                var command = new NpgsqlCommand("DELETE FROM Report WHERE Id = @Id", connection);
-                command.Parameters.AddWithValue("@Id", id);
+                var command = new NpgsqlCommand("CALL delete_report_by_id(@id_argument)", connection);
+                command.Parameters.AddWithValue("@id_argument", id);
                 await command.ExecuteNonQueryAsync();
             }
         }
