@@ -45,7 +45,7 @@ namespace Database.Repository
 
             if (workerDAL == null)
             {
-                throw new Exception("Не нашлось отчета по такому Id");
+                throw new Exception("Не нашлось работника по такому Id");
             }
 
             return workerDAL;

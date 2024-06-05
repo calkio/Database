@@ -44,7 +44,7 @@ namespace Database.Repository
 
             if (organizationDAL == null)
             {
-                throw new Exception("Не нашлось отчета по такому Id");
+                throw new Exception("Не нашлось организации по такому Id");
             }
 
             return organizationDAL;
